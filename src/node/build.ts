@@ -20,7 +20,6 @@ export async function bundle(root: string) {
     }
   });
   const spinner = ora();
-  console.log(spinner);
 
   spinner.start('Building client + server bundles...');
   console.log('Building client + server bundles...');
