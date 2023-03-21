@@ -26,7 +26,7 @@ async function prepareE2E() {
     stderr: process.stderr
   });
 
-  execa.commandSync('pnpm install', {
+  execa.commandSync('pnpm i', {
     cwd: exampleDir,
     stdout: process.stdout,
     stdin: process.stdin,

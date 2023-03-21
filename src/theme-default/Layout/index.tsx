@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Content } from 'runtime/Content';
 
 export function Layout() {
   const [count, setCount] = useState(0);
@@ -9,6 +10,7 @@ export function Layout() {
         {count}
         <button onClick={() => setCount(count + 1)}>Add Count</button>
       </div>
+      <Content />
     </div>
   );
 }

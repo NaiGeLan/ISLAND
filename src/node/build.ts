@@ -4,10 +4,17 @@ import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
 import { join } from 'path';
 import fs from 'fs-extra';
 import ora from 'ora';
-export async function bundle(root: string) {
+import { SiteConfig } from 'shared/types';
+import { pluginConfig } from './plugin-island/config';
+import pluginReact from '@vitejs/plugin-react';
+export async function bundle(root: string, config: SiteConfig) {
   const resolveViteConfig = (isServer: boolean): InlineConfig => ({
     mode: 'production',
     root,
+    plugins: [pluginReact(), pluginConfig(config)],
+    ssr: {
+      noExternal: ['react-router-dom']
+    },
     build: {
       ssr: isServer,
       outDir: isServer ? '.temp' : 'build',
@@ -21,8 +28,7 @@ export async function bundle(root: string) {
   });
   const spinner = ora();
 
-  spinner.start('Building client + server bundles...');
-  console.log('Building client + server bundles...');
+  spinner.start(`Building client + server bundles...`);
 
   try {
     const [clientBundle, serverBundle] = await Promise.all([
@@ -66,12 +72,18 @@ export async function renderPage(
   await fs.remove(join(root, '.temp'));
 }
 
-export async function build(root: string = process.cwd()) {
+export async function build(root: string = process.cwd(), config: SiteConfig) {
   // 1. bundle - client 端 + server 端
-  const [clientBundle] = await bundle(root);
+  const [clientBundle] = await bundle(root, config);
   // 2. 引入 server-entry 模块
   const serverEntryPath = join(root, '.temp', 'ssr-entry.js');
   const { render } = await import(serverEntryPath);
   // 3. 服务端渲染，产出 HTML
-  await renderPage(render, root, clientBundle);
+  try {
+    await renderPage(render, root, clientBundle);
+  } catch (e) {
+    console.log('Render page error.\n', e)
+    
+  }
+  
 }
