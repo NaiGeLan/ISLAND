@@ -1,7 +1,7 @@
 import { build as viteBuild, InlineConfig } from 'vite';
 import type { RollupOutput } from 'rollup';
 import { CLIENT_ENTRY_PATH, SERVER_ENTRY_PATH } from './constants';
-import { join } from 'path';
+import path, { join } from 'path';
 import fs from 'fs-extra';
 import ora from 'ora';
 import { SiteConfig } from 'shared/types';
@@ -16,8 +16,9 @@ export async function bundle(root: string, config: SiteConfig) {
       noExternal: ['react-router-dom']
     },
     build: {
+      minify: false,
       ssr: isServer,
-      outDir: isServer ? '.temp' : 'build',
+      outDir: isServer ? path.join(root, '.temp') : 'build',
       rollupOptions: {
         input: isServer ? SERVER_ENTRY_PATH : CLIENT_ENTRY_PATH,
         output: {
@@ -28,7 +29,7 @@ export async function bundle(root: string, config: SiteConfig) {
   });
   const spinner = ora();
 
-  spinner.start(`Building client + server bundles...`);
+  spinner.start('Building client + server bundles...');
 
   try {
     const [clientBundle, serverBundle] = await Promise.all([
@@ -77,13 +78,13 @@ export async function build(root: string = process.cwd(), config: SiteConfig) {
   const [clientBundle] = await bundle(root, config);
   // 2. 引入 server-entry 模块
   const serverEntryPath = join(root, '.temp', 'ssr-entry.js');
+  console.log(serverEntryPath);
+
   const { render } = await import(serverEntryPath);
   // 3. 服务端渲染，产出 HTML
   try {
     await renderPage(render, root, clientBundle);
   } catch (e) {
-    console.log('Render page error.\n', e)
-    
+    console.log('Render page error.\n', e);
   }
-  
 }
