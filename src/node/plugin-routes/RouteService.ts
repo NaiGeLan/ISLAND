@@ -40,9 +40,9 @@ export class RouteService {
   getRouteMeta(): RouteMeta[] {
     return this.#routeData;
   }
-  normalizeRoutePath(rowPath: string) {
-    const routePath = rowPath.replace(/\.(.*)?$/, '').replace(/index$/, '');
-    return routePath.startsWith('/') ? routePath : `/${rowPath}`;
+  normalizeRoutePath(rawPath: string) {
+    const routePath = rawPath.replace(/\.(.*)?$/, '').replace(/index$/, '');
+    return routePath.startsWith('/') ? routePath : `/${routePath}`;
   }
   generateRoutesCode() {
     return `
