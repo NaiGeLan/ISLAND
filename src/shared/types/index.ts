@@ -1,27 +1,28 @@
 import { UserConfig as ViteConfiguration } from 'vite';
 
-
 export interface ThemeConfig {
-  nav?: NavItemWithLink[]
-  sidebar?: Sidebar
-  footer?: Footer
+  nav?: NavItemWithLink[];
+  sidebar?: Sidebar;
+  footer?: Footer;
 }
 
 export interface NavItemWithLink {
-  text: string
-  link: string
+  text: string;
+  link: string;
 }
 
 export interface Sidebar {
-  [path: string]: SidebarGroup[]
+  [path: string]: SidebarGroup[];
 }
 
 export interface SidebarGroup {
-  text: string
-  items: SidebarItem[]
+  text: string;
+  items: SidebarItem[];
 }
 
-export type SidebarItem = {text: string; link: string} | {text: string; link: string; items: SidebarItem[]}
+export type SidebarItem =
+  | { text: string; link: string }
+  | { text: string; link: string; items: SidebarItem[] };
 
 export interface Footer {
   message?: string;
@@ -29,14 +30,14 @@ export interface Footer {
 }
 
 export interface UserConfig {
-  title?: string
-  description?: string
-  themeConfig?: ThemeConfig
-  vite?: ViteConfiguration
+  title?: string;
+  description?: string;
+  themeConfig?: ThemeConfig;
+  vite?: ViteConfiguration;
 }
 
 export interface SiteConfig {
-  root: string
-  configPath: string
-  siteData: UserConfig
+  root: string;
+  configPath: string;
+  siteData: UserConfig;
 }

@@ -7,11 +7,12 @@ import ora from 'ora';
 import { SiteConfig } from 'shared/types';
 import { pluginConfig } from './plugin-island/config';
 import pluginReact from '@vitejs/plugin-react';
+import { createVitePlugins } from './vitePlugin';
 export async function bundle(root: string, config: SiteConfig) {
   const resolveViteConfig = (isServer: boolean): InlineConfig => ({
     mode: 'production',
     root,
-    plugins: [pluginReact(), pluginConfig(config)],
+    plugins: createVitePlugins(config),
     ssr: {
       noExternal: ['react-router-dom']
     },
@@ -78,7 +79,7 @@ export async function build(root: string = process.cwd(), config: SiteConfig) {
   const [clientBundle] = await bundle(root, config);
   // 2. 引入 server-entry 模块
   const serverEntryPath = join(root, '.temp', 'ssr-entry.js');
-  console.log(serverEntryPath);
+  // console.log(serverEntryPath);
 
   const { render } = await import(serverEntryPath);
   // 3. 服务端渲染，产出 HTML
