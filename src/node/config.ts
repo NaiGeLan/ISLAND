@@ -67,7 +67,7 @@ export async function resolveConfig(
   command: 'serve' | 'build',
   mode: 'development' | 'production'
 ): Promise<SiteConfig> {
-  console.log(root, command, mode);
+  // console.log(root, command, mode);
 
   const [configPath, userConfig] = await resolveUserConfig(root, command, mode);
   // console.log([configPath, userConfig]);

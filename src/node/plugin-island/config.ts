@@ -38,7 +38,7 @@ export function pluginConfig(
           `\n${relative(config.root, ctx.file)} changed, restarting server...`
         );
       }
-      console.log(await restartServer());
+      // console.log(await restartServer());
 
       await restartServer();
     }
